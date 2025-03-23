@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox spacing="10" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chat.controller.ChatController">
+    <TextArea fx:id="chatArea" editable="false" wrapText="true"/>
+    <HBox spacing="5">
+        <TextField fx:id="messageField" promptText="Type your message..."/>
+        <Button text="Send" onAction="#onSendButtonClick"/>
+    </HBox>
+</VBox>
