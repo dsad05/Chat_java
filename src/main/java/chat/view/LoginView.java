@@ -13,7 +13,10 @@ public class LoginView extends Application {
         Scene scene = new Scene(fxmlLoader.load());
 
         LoginController controller = fxmlLoader.getController();
-        controller.setStage(stage);
+        controller.setOnLoginSuccess(() -> {
+            stage.close();
+            new ChatView().show();
+        });
 
         stage.setTitle("Login");
         stage.setScene(scene);
