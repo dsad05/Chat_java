@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<VBox spacing="10" alignment="CENTER" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chat.controller.LoginController">
-    <Label text="Enter your username:"/>
-    <TextField fx:id="usernameField" promptText="Username"/>
-    <Button text="Login" onAction="#onLoginButtonClick"/>
+
+<VBox alignment="CENTER" spacing="10" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chat.controller.LoginController">
+
+    <!-- Username label and input -->
+    <Label text="Enter your username:" />
+    <TextField fx:id="usernameField" promptText="Username" styleClass="text-field" />
+
+    <!-- Login button -->
+    <Button onAction="#onLoginButtonClick" styleClass="button" text="Login" />
 </VBox>
