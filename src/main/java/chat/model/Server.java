@@ -4,11 +4,16 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * Chat server that listens for client connections and starts handlers.
+ */
 public class Server {
     private static final int PORT = 33290;
     private ServerSocket server;
 
-
+    /**
+     * Initializes the server socket on a predefined port.
+     */
     public Server() {
         try{
             server = new ServerSocket(PORT);
@@ -19,10 +24,18 @@ public class Server {
         }
     }
 
+    /**
+     * Returns the port number the server is listening on.
+     *
+     * @return the local port number
+     */
     public int getPort() {
         return server.getLocalPort();
     }
 
+    /**
+     * Accepts client connections and starts their handler threads.
+     */
     private void initConnections() {
         while (!server.isClosed()) {
             try {
@@ -37,6 +50,9 @@ public class Server {
         }
     }
 
+    /**
+     * Closes the server socket.
+     */
     private void closeServer() {
         try {
             if (server != null) server.close();
@@ -45,7 +61,11 @@ public class Server {
         }
     }
 
-
+    /**
+     * Entry point of the server application.
+     *
+     * @param args command-line arguments (not used)
+     */
     public static void main(String[] args) {
         Server server = new Server();
         server.initConnections();

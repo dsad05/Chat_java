@@ -5,7 +5,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Displays the main chat window after successful login.
+ * Loads the FXML layout and initializes the controller.
+ */
 public class ChatView {
+
+    /**
+     * Loads the chat interface and shows it in a new window.
+     */
     public void show() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/chat-view.fxml"));

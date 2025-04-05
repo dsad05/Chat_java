@@ -3,14 +3,23 @@ package chat.model;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-public class ClientHandler implements Runnable {
 
+/**
+ * Handles communication with a single client on the server side.
+ * Responsible for reading, broadcasting messages, and cleanup.
+ */
+public class ClientHandler implements Runnable {
     public static final ArrayList<ClientHandler> clientHandlers = new ArrayList<>();
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
     private String clientUsername;
 
+    /**
+     * Creates a handler for the connected client socket.
+     *
+     * @param socket the client's socket
+     */
     public ClientHandler(Socket socket) {
         try {
             this.socket = socket;
@@ -27,6 +36,9 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Listens for messages from the client and broadcasts them to others.
+     */
     @Override
     public void run() {
         String messageFromClient;
@@ -43,7 +55,11 @@ public class ClientHandler implements Runnable {
         closeEverything();
     }
 
-
+    /**
+     * Broadcasts a message to all connected clients.
+     *
+     * @param messageToSend the message to broadcast
+     */
     public void broadcastMessage(String messageToSend) {
         if (messageToSend == null || messageToSend.isEmpty()) return;
 
@@ -66,6 +82,9 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Removes the client from the active list and notifies others.
+     */
     public synchronized void removeClientHandler() {
         synchronized (clientHandlers) {
             broadcastMessage("SERVER: " + clientUsername + " has left the chat");
@@ -73,6 +92,9 @@ public class ClientHandler implements Runnable {
         }
     }
 
+    /**
+     * Closes resources and removes the client handler.
+     */
     public void closeEverything() {
         try {
             if (bufferedReader != null) bufferedReader.close();

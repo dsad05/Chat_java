@@ -3,6 +3,10 @@ package chat.model;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * Represents a client connected to the chat server.
+ * Manages the socket connection, sending and receiving messages.
+ */
 public class Client {
     private static final int PORT = 33290;
     private static final String HOST = "localhost";
@@ -13,6 +17,11 @@ public class Client {
     private boolean isRunning = true;
     private MessageListener messageListener;
 
+    /**
+     * Creates a client instance and connects to the chat server.
+     *
+     * @param username the username of the client
+     */
     public Client(String username) {
         this.username = username;
         try {
@@ -31,11 +40,21 @@ public class Client {
         }
     }
 
+    /**
+     * Sets the message listener for incoming and outgoing messages.
+     *
+     * @param listener the message listener implementation
+     */
     public void setMessageListener(MessageListener listener) {
         this.messageListener = listener;
         listenForMessage();
     }
 
+    /**
+     * Sends a message to the server.
+     *
+     * @param message the message to send
+     */
     public void sendMessage(String message) {
         try {
             if (socket.isConnected() && isRunning) {
@@ -51,6 +70,9 @@ public class Client {
         }
     }
 
+    /**
+     * Listens for messages from the server in a separate thread.
+     */
     public void listenForMessage() {
         new Thread(() -> {
             String message;
@@ -74,6 +96,9 @@ public class Client {
         }).start();
     }
 
+    /**
+     * Closes all connections and streams.
+     */
     public synchronized void closeEverything() {
         if (!isRunning) return;
         isRunning = false;
