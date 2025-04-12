@@ -6,13 +6,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- * Displays the main chat window after successful login.
- * Loads the FXML layout and initializes the controller.
+ * Represents the chat view window of the application.
+ * Loads the chat interface and initializes the ChatController.
  */
 public class ChatView {
 
     /**
-     * Loads the chat interface and shows it in a new window.
+     * Displays the chat window and initializes the client connection.
      */
     public void show() {
         try {

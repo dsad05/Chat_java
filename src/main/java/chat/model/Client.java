@@ -2,14 +2,16 @@ package chat.model;
 
 import java.io.*;
 import java.net.Socket;
+import javafx.application.Platform;
 
 /**
- * Represents a client connected to the chat server.
- * Manages the socket connection, sending and receiving messages.
+ * Represents a chat client that connects to the server.
+ * Handles sending and receiving messages over a socket connection.
  */
 public class Client {
     private static final int PORT = 33290;
     private static final String HOST = "localhost";
+
     private Socket socket;
     private BufferedReader bufferedReader;
     private BufferedWriter bufferedWriter;
@@ -18,9 +20,8 @@ public class Client {
     private MessageListener messageListener;
 
     /**
-     * Creates a client instance and connects to the chat server.
-     *
-     * @param username the username of the client
+     * Creates a new client instance and connects to the server using the given username.
+     * @param username the username for the chat session
      */
     public Client(String username) {
         this.username = username;
@@ -30,7 +31,6 @@ public class Client {
             this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
             bufferedWriter.write(username);
-
             bufferedWriter.newLine();
             bufferedWriter.flush();
 
@@ -41,9 +41,9 @@ public class Client {
     }
 
     /**
-     * Sets the message listener for incoming and outgoing messages.
-     *
-     * @param listener the message listener implementation
+     * Sets the listener to handle incoming and sent messages.
+     * Starts listening for incoming messages.
+     * @param listener the message listener
      */
     public void setMessageListener(MessageListener listener) {
         this.messageListener = listener;
@@ -52,7 +52,6 @@ public class Client {
 
     /**
      * Sends a message to the server.
-     *
      * @param message the message to send
      */
     public void sendMessage(String message) {
@@ -62,7 +61,7 @@ public class Client {
                 bufferedWriter.newLine();
                 bufferedWriter.flush();
                 System.out.println("Message sent: " + message);
-                javafx.application.Platform.runLater(() -> messageListener.onMessageSent(message));
+                Platform.runLater(() -> messageListener.onMessageSent(message));
             }
         } catch (IOException e) {
             System.err.println("Error sending message: " + e.getMessage());
@@ -71,44 +70,41 @@ public class Client {
     }
 
     /**
-     * Listens for messages from the server in a separate thread.
+     * Starts a background thread to listen for messages from the server.
      */
     public void listenForMessage() {
-        new Thread(() -> {
+        Thread listenThread = new Thread(() -> {
             String message;
             while (!socket.isClosed()) {
                 try {
                     message = bufferedReader.readLine();
                     if (message == null) {
-                        closeEverything();
                         break;
                     }
                     if (messageListener != null) {
                         String finalMessage = message;
-                        System.out.println("Received: " + finalMessage);
-                        javafx.application.Platform.runLater(() -> messageListener.onMessageReceived(finalMessage));
+                        Platform.runLater(() -> messageListener.onMessageReceived(finalMessage));
                     }
                 } catch (IOException e) {
-                    closeEverything();
                     break;
                 }
             }
-        }).start();
+            closeEverything();
+        });
+        listenThread.setDaemon(true);
+        listenThread.start();
     }
 
     /**
-     * Closes all connections and streams.
+     * Closes the client connection and all associated resources.
+     * Waits briefly for the listener thread to finish.
      */
     public synchronized void closeEverything() {
         if (!isRunning) return;
+
+        sendMessage(username + " has left the chat");
         isRunning = false;
-        try {
-            if (bufferedReader != null) bufferedReader.close();
-            if (bufferedWriter != null) bufferedWriter.close();
-            if (socket != null) socket.close();
-            System.out.println("Connection closed.");
-        } catch (IOException e) {
-            System.err.println("Error closing resources: " + e.getMessage());
-        }
+        System.exit(0);
     }
+
 }

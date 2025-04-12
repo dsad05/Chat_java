@@ -9,21 +9,22 @@ import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
 
 /**
- * Controller for the chat window.
- * Handles sending messages and updating the chat area.
+ * Controller responsible for managing the chat interface.
+ * Handles sending and receiving messages, as well as initializing the client.
  */
 public class ChatController implements MessageListener {
+
     @FXML
     private TextArea chatArea;
+
     @FXML
     private TextField messageField;
 
     private Client client;
 
     /**
-     * Initializes the chat client with a given username.
-     *
-     * @param username the username of the current user
+     * Initializes the chat client with the specified username.
+     * @param username the username for this chat session
      */
     public void initializeClient(String username) {
         this.client = new Client(username);
@@ -31,9 +32,8 @@ public class ChatController implements MessageListener {
     }
 
     /**
-     * Called when the send button is clicked.
-     *
-     * @param event the action event
+     * Sends the message typed by the user when the send button is clicked.
+     * @param event the action event triggered by the send button
      */
     @FXML
     private void onSendButtonClick(ActionEvent event) {
@@ -45,16 +45,7 @@ public class ChatController implements MessageListener {
     }
 
     /**
-     * Cleans up resources when the window is closed.
-     */
-    @FXML
-    public void onCloseWindow() {
-        client.closeEverything();
-    }
-
-    /**
-     * Updates the chat area with a new message from the server.
-     *
+     * Callback method triggered when a message is received from the server.
      * @param message the received message
      */
     @Override
@@ -63,9 +54,8 @@ public class ChatController implements MessageListener {
     }
 
     /**
-     * Displays the message the user just sent.
-     *
-     * @param message the sent message
+     * Callback method triggered after a message has been successfully sent.
+     * @param message the message that was sent
      */
     @Override
     public void onMessageSent(String message) {
