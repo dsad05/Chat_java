@@ -1,0 +1,4 @@
+module:chat.demo
+chat.controller
+chat.model
+chat.view
