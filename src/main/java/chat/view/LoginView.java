@@ -14,6 +14,7 @@ public class LoginView extends Application {
 
     /**
      * Starts the JavaFX application by showing the login window.
+     * After successful logging shows ChatView.
      *
      * @param stage the main stage
      * @throws Exception if FXML loading fails

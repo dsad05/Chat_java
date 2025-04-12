@@ -9,4 +9,5 @@ module chat.demo {
     opens chat.controller to javafx.fxml;
     exports chat.view;
     opens chat.view to javafx.fxml;
+    exports chat.model;
 }
